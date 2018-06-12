@@ -1,8 +1,6 @@
 server:
   port: 9080
 eureka:
-  # 心跳检测检测与续约时间
-  # 测试时将值设置设置小些，保证服务关闭后注册中心能及时踢出服务
   server:
     leaseRenewalIntervalInSeconds: 1
     leaseExpirationDurationInSeconds: 2
@@ -12,3 +10,15 @@ eureka:
 spring:
   application:
     name: authServer
+
+  datasource:
+      url: "jdbc:mysql://192.168.1.178/demouserdb?useUnicode=true&useSSL=false"
+      username: demouser
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+
+mybatis:
+  mapper-locations:
+    classpath:mapping/*.xml
+  type-aliases-package:
+    com.user.info.entity
