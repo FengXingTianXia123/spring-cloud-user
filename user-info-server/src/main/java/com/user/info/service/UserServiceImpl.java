@@ -8,6 +8,7 @@ import com.user.info.mapper.UserMapper;
 import com.user.util.ClassCopy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,5 +27,14 @@ public class UserServiceImpl implements IUserInfoService {
         System.out.println("--------"+JSON.toJSONString(user));
         System.out.println("--------"+user.getName());
         return userInfo;
+    }
+
+    @Override
+    public int addUser(@RequestBody UserInfo userInfo) throws Exception {
+        System.out.println("--------"+JSON.toJSONString(userInfo));
+        User user=new User();
+        user=(User)ClassCopy.copy(userInfo,user);
+        int result=userMapper.insertSelective(user);
+        return result;
     }
 }

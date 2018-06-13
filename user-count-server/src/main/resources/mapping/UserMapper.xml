@@ -22,7 +22,7 @@
     insert into t_user_info (id, name)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.user.info.entity.User" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.user.info.entity.User" >
     insert into t_user_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
