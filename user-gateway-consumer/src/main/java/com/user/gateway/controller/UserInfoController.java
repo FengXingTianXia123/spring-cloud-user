@@ -1,7 +1,8 @@
 package com.user.gateway.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.user.entity.UserInfo;
+import com.user.entity.UserInfoVo;
+import com.user.entity.UserRecordVo;
 import com.user.gateway.client.UserInfoAuthClient;
 import com.user.gateway.client.UserInfoFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +29,13 @@ public class UserInfoController {
             userId = 1;
         }
 
-        UserInfo userInfo = userInfoFeignClient.getUser(userId);
+        UserInfoVo userInfo = userInfoFeignClient.getUser(userId);
         System.out.println("-----"+JSON.toJSONString(userInfo));
         return JSON.toJSONString(userInfo);
     }
 
     @RequestMapping(value="/addUser", method=RequestMethod.POST)
-    public Object getUser(@RequestBody UserInfo userInfo) throws Exception {
+    public Object getUser(@RequestBody UserInfoVo userInfo) throws Exception {
 
         System.out.println("-----"+JSON.toJSONString(userInfo));
         int result = userInfoFeignClient.addUser(userInfo);
@@ -52,23 +53,43 @@ public class UserInfoController {
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public Object login(HttpServletRequest request, HttpServletResponse response)throws Exception{
         long userId=Long.parseLong(request.getParameter("userId"));
-        UserInfo userInfo =new UserInfo();
+        UserInfoVo userInfo =new UserInfoVo();
         userInfo=userInfoFeignClient.getUser(userId);
-        countUser(request,userInfo);
+        saveSession(request,userInfo);
         return userInfo;
     }
 
-    public String countUser(HttpServletRequest request,UserInfo userInfo){
+    public void saveSession(HttpServletRequest request,UserInfoVo userInfo) throws Exception {
         HttpSession session= request.getSession();
-        String session_id=session.getId();
+        session.setMaxInactiveInterval(70);
+        Object obj = session.getAttribute("userInfo");
+        String sessionId=session.getId();
+        System.out.println("----"+JSON.toJSONString(userInfo));
+        System.out.println("--sessionId--"+sessionId);
+        UserRecordVo record=new UserRecordVo();
 
-        session.setAttribute("userInfo",userInfo);
+        record.setUserId(userInfo.getId());
+        record.setUserName(userInfo.getName());
+        record.setSessionId(sessionId);
+        userInfo.setUserRecordVo(record);
 
+        if(obj instanceof UserInfoVo) {
 
+        }else{
+            session.setAttribute("userInfo",userInfo);
+            userInfoAuthClient.saveRecord(record);
+        }
 
-
-        System.out.println("session:"+JSON.toJSONString(session));
-        System.out.println("sessionId:"+JSON.toJSONString(session.getId()));
-        return "";
     }
+    @RequestMapping(value = "/loginOut",method = RequestMethod.GET)
+    public void loginOut(HttpServletRequest request, HttpServletResponse response)throws Exception{
+        HttpSession session=request.getSession(false);
+        session.removeAttribute("userInfo");
+    }
+
+//    @RequestMapping(value = "/getUserCal",method = RequestMethod.GET)
+//    public Object getUserCal(HttpServletRequest request, HttpServletResponse response)throws Exception{
+//        userInfoAuthClient.getUserCal();
+//        return null;
+//    }
 }

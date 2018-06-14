@@ -1,6 +1,7 @@
 server:
   port: 9090
 
+
 eureka:
   server:
     leaseRenewalIntervalInSeconds: 1
@@ -12,3 +13,24 @@ eureka:
 spring:
   application:
     name: gatewayServer
+  session:
+    timeout: 70s
+    store-type: none
+
+
+
+
+
+
+#    redis:
+#      host: 127.0.0.1
+#      port: 6379
+#      password: K5re9U#mX@
+#      database: 4
+#      pool:
+#        max-active: 20
+#        max-idle: 20
+#        min-idle: 0
+#
+
+

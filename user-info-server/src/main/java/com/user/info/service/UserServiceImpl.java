@@ -2,7 +2,9 @@ package com.user.info.service;
 
 import com.alibaba.fastjson.JSON;
 import com.user.api.IUserInfoService;
-import com.user.entity.UserInfo;
+
+import com.user.entity.UserInfoVo;
+import com.user.entity.UserRecordVo;
 import com.user.info.entity.User;
 import com.user.info.mapper.UserMapper;
 import com.user.util.ClassCopy;
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 @Service
 @RestController
 public class UserServiceImpl implements IUserInfoService {
@@ -20,17 +24,21 @@ public class UserServiceImpl implements IUserInfoService {
     UserMapper userMapper;
 
     @Override
-    public UserInfo getUser(@RequestParam("userId") long userId) throws Exception {
-        UserInfo userInfo=new UserInfo();
+    public UserInfoVo getUser(@RequestParam("userId") long userId) throws Exception {
+        UserInfoVo userInfo=new UserInfoVo();
         User user=userMapper.selectByPrimaryKey(userId);
-        userInfo= (UserInfo)ClassCopy.copy(user,userInfo);
+        userInfo= (UserInfoVo)ClassCopy.copy(user,userInfo);
+        UserRecordVo userRecord=new UserRecordVo();
+        userRecord.setLoginTime(new Date());
+        userInfo.setUserRecordVo(userRecord);
         System.out.println("--------"+JSON.toJSONString(user));
         System.out.println("--------"+user.getName());
         return userInfo;
     }
 
+
     @Override
-    public int addUser(@RequestBody UserInfo userInfo) throws Exception {
+    public int addUser(@RequestBody UserInfoVo userInfo) throws Exception {
         System.out.println("--------"+JSON.toJSONString(userInfo));
         User user=new User();
         user=(User)ClassCopy.copy(userInfo,user);

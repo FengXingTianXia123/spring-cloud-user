@@ -1,10 +1,8 @@
-package com.user.entity;
+package com.user.count.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class UserRecord implements Serializable{
-    private static final long serialVersionUID = 7672185252682460128L;
+public class Record {
     private Long id;
 
     private Long userId;
@@ -64,5 +62,4 @@ public class UserRecord implements Serializable{
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId == null ? null : sessionId.trim();
     }
-
 }

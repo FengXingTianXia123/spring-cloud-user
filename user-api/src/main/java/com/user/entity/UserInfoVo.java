@@ -2,7 +2,7 @@ package com.user.entity;
 
 import java.io.Serializable;
 
-public class UserInfo implements Serializable{
+public class UserInfoVo implements Serializable{
 
     private static final long serialVersionUID = -1443091008264579250L;
 
@@ -16,7 +16,7 @@ public class UserInfo implements Serializable{
 
     private Long age;
 
-    private UserRecord userRecord;
+    private UserRecordVo userRecordVo;
 
     public Long getId() {
         return id;
@@ -58,11 +58,11 @@ public class UserInfo implements Serializable{
         this.age = age;
     }
 
-    public UserRecord getUserRecord() {
-        return userRecord;
+    public UserRecordVo getUserRecordVo() {
+        return userRecordVo;
     }
 
-    public void setUserRecord(UserRecord userRecord) {
-        this.userRecord = userRecord;
+    public void setUserRecordVo(UserRecordVo userRecordVo) {
+        this.userRecordVo = userRecordVo;
     }
 }

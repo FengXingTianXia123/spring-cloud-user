@@ -7,7 +7,7 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication(scanBasePackages = {"com.user"})
-@MapperScan("com.user.info.mapper")
+@MapperScan("com.user.auth.mapper")
 @EnableFeignClients(basePackages = {"com.user"})
 @EnableCircuitBreaker
 public class UserAuthServerApplication {
