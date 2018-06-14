@@ -13,11 +13,6 @@ spring:
   application:
     name: userServer
 
-#  jpa:
-#    generate-ddl: false
-#    show-sql: true
-#    hibernate:
-#      ddl-auto: none
   datasource:
       url: "jdbc:mysql://192.168.1.178/demouserdb?useUnicode=true&useSSL=false"
       username: demouser

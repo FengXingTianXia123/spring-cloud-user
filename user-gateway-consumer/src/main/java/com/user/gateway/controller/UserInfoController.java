@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/user")
@@ -50,7 +51,24 @@ public class UserInfoController {
 
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     public Object login(HttpServletRequest request, HttpServletResponse response)throws Exception{
+        long userId=Long.parseLong(request.getParameter("userId"));
+        UserInfo userInfo =new UserInfo();
+        userInfo=userInfoFeignClient.getUser(userId);
+        countUser(request,userInfo);
+        return userInfo;
+    }
 
-        return null;
+    public String countUser(HttpServletRequest request,UserInfo userInfo){
+        HttpSession session= request.getSession();
+        String session_id=session.getId();
+
+        session.setAttribute("userInfo",userInfo);
+
+
+
+
+        System.out.println("session:"+JSON.toJSONString(session));
+        System.out.println("sessionId:"+JSON.toJSONString(session.getId()));
+        return "";
     }
 }
