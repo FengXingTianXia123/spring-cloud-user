@@ -109,9 +109,12 @@
     <include refid="Base_Column_List" />
     from t_user_record
     where 1=1
-    and login_time  >=  str_to_date(#{curTime,jdbcType=TIMESTAMP}, '%Y-%m-%d %h:%i:%s')
-    and logout_time >=  str_to_date(#{curTime,jdbcType=TIMESTAMP}, '%Y-%m-%d %h:%i:%s')
-    and login_time like CONCAT('%', substring(#{curTime,jdbcType=VARCHAR},0,8))
+    and (login_time  >= #{curTime,jdbcType=VARCHAR}
+    and logout_time >= #{curTime,jdbcType=VARCHAR}
+    and login_time like CONCAT(substring(#{curTime,jdbcType=VARCHAR},0,10),'%'))
+    or(#{curTime,jdbcType=VARCHAR} >=login_time
+    and logout_time >= #{curTime,jdbcType=VARCHAR}
+    and logout_time like CONCAT(substring(#{curTime,jdbcType=VARCHAR},0,10),'%'))
   </select>
 
 

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication(scanBasePackages = {"com.user"})
-@MapperScan("com.user.info.mapper")
+@MapperScan("com.user.count.mapper")
 public class UserCountServerApplication {
 
 	public static void main(String[] args) {

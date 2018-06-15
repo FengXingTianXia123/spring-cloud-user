@@ -1,6 +1,10 @@
 package com.user.count.mapper;
 
+import com.sun.xml.internal.ws.spi.db.DatabindingException;
 import com.user.count.entity.Record;
+
+import java.util.Date;
+import java.util.List;
 
 public interface RecordMapper {
     int deleteByPrimaryKey(Long id);
@@ -15,5 +19,5 @@ public interface RecordMapper {
 
     int updateByPrimaryKey(Record record);
 
-    int countLoginMinuteByDay(String date);
+    List<Record> countLoginMinuteByDay(String curTime);
 }
