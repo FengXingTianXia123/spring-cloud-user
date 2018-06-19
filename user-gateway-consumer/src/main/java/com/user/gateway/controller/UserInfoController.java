@@ -1,6 +1,7 @@
 package com.user.gateway.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.user.entity.UserCountVo;
 import com.user.entity.UserInfoVo;
 import com.user.entity.UserLoginVo;
 import com.user.entity.UserRecordVo;
@@ -39,7 +40,9 @@ public class UserInfoController {
 
         UserInfoVo userInfo = userInfoFeignClient.getUser(userId);
         System.out.println("-----" + JSON.toJSONString(userInfo));
-        return JSON.toJSONString(userInfo);
+        Map<String,Object> resultMap=new HashMap<>();
+        resultMap.put("result",userInfo);
+        return resultMap;
     }
 
     /*
@@ -116,8 +119,28 @@ public class UserInfoController {
     @RequestMapping(value = "/getLoginMinuteByDay", method = RequestMethod.POST)
     public Object getLoginMinuteByDay(@RequestBody Map<String,Object>map) throws Exception {
         System.out.println("----ru can-----" + JSON.toJSONString(map));
+        Map<String,Object>resultMap=new HashMap<>();
         List resList = userInfoCountClient.getLoginMinuteByDay(map);
-        return resList;
+        resultMap.put("result",resList);
+        return resultMap;
+    }
+
+    @RequestMapping(value = "/getPie", method = RequestMethod.GET)
+    public Object getPie(@RequestParam(value = "type") String type) throws Exception {
+        System.out.println("----ru can-----" + type);
+        Map<String,Object>resultMap=new HashMap<>();
+        List<UserCountVo> uCountList = userInfoCountClient.getPie(type);
+        resultMap.put("result",uCountList);
+        return resultMap;
+    }
+
+    @RequestMapping(value = "/getUserCountByDay", method = RequestMethod.POST)
+    public Object getUserCountByDay(@RequestBody Map<String,Object>map) throws Exception {
+        Map<String,Object>resultMap=new HashMap<>();
+        System.out.println("----ru can-----" + map);
+        List resList = userInfoCountClient.getUserCountByDay(map);
+        resultMap.put("result",resList);
+        return resultMap;
     }
 
     /*

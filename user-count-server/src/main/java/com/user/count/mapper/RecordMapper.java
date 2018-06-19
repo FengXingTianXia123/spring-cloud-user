@@ -1,9 +1,9 @@
 package com.user.count.mapper;
 
-import com.sun.xml.internal.ws.spi.db.DatabindingException;
 import com.user.count.entity.Record;
+import com.user.count.entity.UserCount;
+import org.apache.ibatis.annotations.Param;
 
-import java.util.Date;
 import java.util.List;
 
 public interface RecordMapper {
@@ -19,5 +19,11 @@ public interface RecordMapper {
 
     int updateByPrimaryKey(Record record);
 
-    List<Record> countLoginMinuteByDay(String curTime);
+    List<Record> countLoginMinuteByDay(@Param("userId") long userId,@Param("curTime") String curTime,@Param("nextTime")String nextTime);
+
+    List<UserCount> getPieByAge();
+
+    List<UserCount> getPieByGender();
+
+    int getUserCountByDay(String date);
 }
