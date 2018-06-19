@@ -1,0 +1,12 @@
+zuul:
+  routes:
+    gatewayServer: /zuul-user/**
+    countServer: /zuul-count/**
+    authServer: /zuul-auth/**
+
+server:
+  port: 8000
+
+spring:
+  application:
+    name: zuulServer
