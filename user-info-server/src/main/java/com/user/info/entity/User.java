@@ -7,7 +7,7 @@ public class User {
 
     private String realName;
 
-    private Boolean gender;
+    private int gender;
 
     private Long age;
 
@@ -35,11 +35,11 @@ public class User {
         this.realName = realName == null ? null : realName.trim();
     }
 
-    public Boolean getGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(Boolean gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 

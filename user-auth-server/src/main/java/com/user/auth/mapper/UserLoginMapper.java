@@ -14,4 +14,8 @@ public interface UserLoginMapper {
     int updateByPrimaryKeySelective(UserLogin record);
 
     int updateByPrimaryKey(UserLogin record);
+
+    int selectLoginInfo(String userName, String password);
+
+    int selectUserType(String userName);
 }

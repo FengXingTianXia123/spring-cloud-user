@@ -12,4 +12,11 @@ public interface IUserInfoService {
 
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
     int addUser(@RequestBody UserInfoVo userInfoVo) throws Exception;
+
+    @RequestMapping(value = "/getUserByName", method = RequestMethod.GET)
+    int getUserByName(@RequestParam(value = "userName") String userName) throws Exception;
+
+    @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
+    UserInfoVo getUserInfo(@RequestParam(value = "userName") String userName) throws Exception;
+
 }

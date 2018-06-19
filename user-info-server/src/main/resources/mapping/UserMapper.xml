@@ -90,4 +90,16 @@
       age = #{age,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  <select id="selectByUserName" resultType="java.lang.Integer" parameterType="java.lang.String" >
+    select
+     count(1)
+    from t_user_info
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+  <select id="selectUserInfo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from t_user_info
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
 </mapper>

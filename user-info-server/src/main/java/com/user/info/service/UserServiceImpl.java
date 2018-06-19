@@ -38,11 +38,31 @@ public class UserServiceImpl implements IUserInfoService {
 
 
     @Override
-    public int addUser(@RequestBody UserInfoVo userInfo) throws Exception {
-        System.out.println("--------"+JSON.toJSONString(userInfo));
-        User user=new User();
-        user=(User)ClassCopy.copy(userInfo,user);
+    public int addUser(@RequestBody UserInfoVo userInfoVo) throws Exception {
+        User user = new User();
+        user=(User)ClassCopy.copy(userInfoVo,user);
+        //添加用户注册信息到t_user_info表
         int result=userMapper.insertSelective(user);
         return result;
+    }
+
+    @Override
+    public int getUserByName(@RequestParam("userName") String userName) throws Exception {
+        int result=userMapper.selectByUserName(userName);
+        System.out.println("--------"+result);
+        return result;
+    }
+
+    @Override
+    public UserInfoVo getUserInfo(@RequestParam("userName") String userName) throws Exception {
+        UserInfoVo userInfo=new UserInfoVo();
+        User user=userMapper.selectUserInfo(userName);
+        userInfo= (UserInfoVo)ClassCopy.copy(user,userInfo);
+        UserRecordVo userRecord=new UserRecordVo();
+        userRecord.setLoginTime(new Date());
+        userInfo.setUserRecordVo(userRecord);
+        System.out.println("--------"+JSON.toJSONString(user));
+        System.out.println("--------"+user.getName());
+        return userInfo;
     }
 }

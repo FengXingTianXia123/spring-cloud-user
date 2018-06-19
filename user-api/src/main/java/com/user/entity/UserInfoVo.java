@@ -18,6 +18,8 @@ public class UserInfoVo implements Serializable{
 
     private UserRecordVo userRecordVo;
 
+    private String password;
+
     public Long getId() {
         return id;
     }
@@ -64,5 +66,13 @@ public class UserInfoVo implements Serializable{
 
     public void setUserRecordVo(UserRecordVo userRecordVo) {
         this.userRecordVo = userRecordVo;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

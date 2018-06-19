@@ -2,6 +2,7 @@ package com.user.gateway.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.user.entity.UserInfoVo;
+import com.user.entity.UserLoginVo;
 import com.user.entity.UserRecordVo;
 import com.user.gateway.client.UserInfoAuthClient;
 import com.user.gateway.client.UserInfoCountClient;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,12 +42,26 @@ public class UserInfoController {
         return JSON.toJSONString(userInfo);
     }
 
-    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
-    public Object getUser(@RequestBody UserInfoVo userInfo) throws Exception {
-
-        System.out.println("-----" + JSON.toJSONString(userInfo));
-        int result = userInfoFeignClient.addUser(userInfo);
-        return result;
+    /*
+    注册用户
+     */
+    @RequestMapping(value = "/addUser", method = RequestMethod.GET)
+    public Object getUser(@RequestBody UserInfoVo userInfoVo) throws Exception {
+        Map<String,Object> resultMap=new HashMap<>();
+        //登记info表
+        int status;
+        int result = userInfoFeignClient.addUser(userInfoVo);
+        if(result == 0){
+            status = 0;
+            resultMap.put("status",status);
+            return resultMap;
+        }else{
+            status = 1;
+            //登记login表
+            userInfoAuthClient.addUserLoginInfo(userInfoVo);
+            resultMap.put("status",status);
+            return resultMap;
+        }
     }
 
     @RequestMapping(value = "/getAuthInfo", method = RequestMethod.GET)
@@ -103,4 +119,59 @@ public class UserInfoController {
         List resList = userInfoCountClient.getLoginMinuteByDay(map);
         return resList;
     }
+
+    /*
+    注册判断用户名是否已存在
+     */
+    @RequestMapping(value="/getUserByName", method=RequestMethod.GET)
+    public Object getUser(@RequestParam(value="userName") String userName) throws Exception {
+        System.out.println("------------userName-----"+userName);
+        int result = userInfoFeignClient.getUserByName(userName);
+        System.out.println("-----"+result);
+        Map<String,Object> resultMap=new HashMap<>();
+        resultMap.put("result",result);
+        return resultMap;
+    }
+
+    /*
+    用户登录校验
+     */
+    @RequestMapping(value = "/loginCheck",method = RequestMethod.POST)
+    public Object loginCheck(HttpServletRequest request, HttpServletResponse response)throws Exception{
+        String userName=(String)request.getParameter("userName");
+        String password=(String)request.getParameter("password");
+        int result = userInfoAuthClient.getUserLogin(userName,password);
+        System.out.println("-----"+result);
+        UserInfoVo userInfo =new UserInfoVo();
+        userInfo=userInfoFeignClient.getUserInfo(userName);
+        saveSession(request,userInfo);
+        Map<String,Object> resultMap=new HashMap<>();
+        resultMap.put("result",result);
+        return resultMap;
+    }
+
+    /*
+    获取用户信息
+     */
+    @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
+    public Object getUserInfo(@RequestParam(value = "userName") String userName) throws Exception {
+        System.out.println("------------userName-----" + userName);
+        UserInfoVo userInfo = userInfoFeignClient.getUserInfo(userName);
+        System.out.println("-----" + JSON.toJSONString(userInfo));
+        return JSON.toJSONString(userInfo);
+    }
+
+    /*
+    获取用户角色
+     */
+    @RequestMapping(value = "/getUserType", method = RequestMethod.GET)
+    public Object getUserType(@RequestParam(value = "userName") String userName) throws Exception {
+        System.out.println("------------userName-----" + userName);
+        int type = userInfoAuthClient.getUserType(userName);
+        System.out.println("-----" + type);
+        Map<String,Object> TypeMap=new HashMap<>();
+        TypeMap.put("type",type);
+        return TypeMap;
+    }
+
 }

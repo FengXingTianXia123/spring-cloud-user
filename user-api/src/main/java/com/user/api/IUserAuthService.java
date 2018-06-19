@@ -1,5 +1,7 @@
 package com.user.api;
 
+import com.user.entity.UserInfoVo;
+import com.user.entity.UserLoginVo;
 import com.user.entity.UserRecordVo;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,4 +18,12 @@ public interface IUserAuthService {
     @RequestMapping(value = "/updateUserRecord", method = RequestMethod.POST)
     String updateUserRecord(@RequestBody UserRecordVo record) throws Exception;
 
+    @RequestMapping(value = "/getUserLogin", method = RequestMethod.GET)
+    int getUserLogin(@RequestParam(value = "userName") String userName, @RequestParam(value = "password") String password) throws Exception;
+
+    @RequestMapping(value = "/addUserLoginInfo", method = RequestMethod.GET)
+    void addUserLoginInfo(@RequestBody UserInfoVo userInfoVo) throws Exception;
+
+    @RequestMapping(value = "/getUserType", method = RequestMethod.GET)
+    int getUserType(@RequestParam(value = "userName") String userName) throws Exception;
 }
