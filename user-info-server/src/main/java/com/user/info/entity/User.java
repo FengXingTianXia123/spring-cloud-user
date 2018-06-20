@@ -7,9 +7,11 @@ public class User {
 
     private String realName;
 
-    private int gender;
+    private Long gender;
 
     private Long age;
+
+    private Long type;
 
     public Long getId() {
         return id;
@@ -35,11 +37,11 @@ public class User {
         this.realName = realName == null ? null : realName.trim();
     }
 
-    public int getGender() {
+    public Long getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(Long gender) {
         this.gender = gender;
     }
 
@@ -50,4 +52,13 @@ public class User {
     public void setAge(Long age) {
         this.age = age;
     }
+
+    public Long getType() {
+        return type;
+    }
+
+    public void setType(Long type) {
+        this.type = type;
+    }
+
 }

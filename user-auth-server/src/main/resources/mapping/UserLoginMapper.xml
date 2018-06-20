@@ -23,8 +23,7 @@
   <insert id="insert" parameterType="com.user.auth.entity.UserLogin" >
     insert into t_user_login (id, user_name, type, 
       password)
-    values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, 0,
-      #{password,jdbcType=VARCHAR})
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 0,#{password,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.user.auth.entity.UserLogin" >
     insert into t_user_login
@@ -79,7 +78,7 @@
       password = #{password,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="selectLoginInfo" resultType="java.lang.Long" parameterType="java.lang.String" >
+  <select id="selectLoginInfo" resultType="java.lang.Integer" parameterType="java.lang.String" >
     select
     count(1)
     from t_user_login

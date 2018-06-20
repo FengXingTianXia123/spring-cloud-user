@@ -21,7 +21,7 @@ public interface IUserAuthService {
     @RequestMapping(value = "/getUserLogin", method = RequestMethod.GET)
     int getUserLogin(@RequestParam(value = "userName") String userName, @RequestParam(value = "password") String password) throws Exception;
 
-    @RequestMapping(value = "/addUserLoginInfo", method = RequestMethod.GET)
+    @RequestMapping(value = "/addUserLoginInfo", method = RequestMethod.POST)
     void addUserLoginInfo(@RequestBody UserInfoVo userInfoVo) throws Exception;
 
     @RequestMapping(value = "/getUserType", method = RequestMethod.GET)

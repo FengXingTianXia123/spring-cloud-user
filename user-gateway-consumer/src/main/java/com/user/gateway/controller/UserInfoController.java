@@ -3,7 +3,6 @@ package com.user.gateway.controller;
 import com.alibaba.fastjson.JSON;
 import com.user.entity.UserCountVo;
 import com.user.entity.UserInfoVo;
-import com.user.entity.UserLoginVo;
 import com.user.entity.UserRecordVo;
 import com.user.gateway.client.UserInfoAuthClient;
 import com.user.gateway.client.UserInfoCountClient;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,22 +49,30 @@ public class UserInfoController {
     /*
     注册用户
      */
-    @RequestMapping(value = "/addUser", method = RequestMethod.GET)
+    @RequestMapping(value = "/addUser", method = RequestMethod.POST)
     public Object getUser(@RequestBody UserInfoVo userInfoVo) throws Exception {
         Map<String,Object> resultMap=new HashMap<>();
-        //登记info表
+        String userName = userInfoVo.getName();
+        int count = userInfoFeignClient.getUserByName(userName);
         int status;
-        int result = userInfoFeignClient.addUser(userInfoVo);
-        if(result == 0){
-            status = 0;
+        if(count != 0){
+            status = 2;
             resultMap.put("status",status);
             return resultMap;
         }else{
-            status = 1;
-            //登记login表
-            userInfoAuthClient.addUserLoginInfo(userInfoVo);
-            resultMap.put("status",status);
-            return resultMap;
+            //登记info表
+            int result = userInfoFeignClient.addUser(userInfoVo);
+            if(result == 0){
+                status = 0;
+                resultMap.put("status",status);
+                return resultMap;
+            }else {
+                status = 1;
+                //登记login表
+                userInfoAuthClient.addUserLoginInfo(userInfoVo);
+                resultMap.put("status", status);
+                return resultMap;
+            }
         }
     }
 
@@ -151,15 +160,21 @@ public class UserInfoController {
         System.out.println("------------userName-----"+userName);
         int result = userInfoFeignClient.getUserByName(userName);
         System.out.println("-----"+result);
-        Map<String,Object> resultMap=new HashMap<>();
-        resultMap.put("result",result);
-        return resultMap;
+        int status;
+        if(result == 0){
+            status = 1;
+        }else{
+            status = 0;
+        }
+        Map<String,Object> statusMap=new HashMap<>();
+        statusMap.put("status",status);
+        return statusMap;
     }
 
     /*
     用户登录校验
      */
-    @RequestMapping(value = "/loginCheck",method = RequestMethod.POST)
+    @RequestMapping(value = "/loginCheck",method = RequestMethod.GET)
     public Object loginCheck(HttpServletRequest request, HttpServletResponse response)throws Exception{
         String userName=(String)request.getParameter("userName");
         String password=(String)request.getParameter("password");
@@ -169,12 +184,20 @@ public class UserInfoController {
         userInfo=userInfoFeignClient.getUserInfo(userName);
         saveSession(request,userInfo);
         Map<String,Object> resultMap=new HashMap<>();
-        resultMap.put("result",result);
+        int type = userInfoAuthClient.getUserType(userName);
+        int status;
+        if(result != 0){
+            status = 1;
+        }else{
+            status = 0;
+        }
+        resultMap.put("status",status);
+        resultMap.put("type",type);
         return resultMap;
     }
 
     /*
-    获取用户信息
+    获取用户信息和角色
      */
     @RequestMapping(value = "/getUserInfo", method = RequestMethod.GET)
     public Object getUserInfo(@RequestParam(value = "userName") String userName) throws Exception {
@@ -183,18 +206,4 @@ public class UserInfoController {
         System.out.println("-----" + JSON.toJSONString(userInfo));
         return JSON.toJSONString(userInfo);
     }
-
-    /*
-    获取用户角色
-     */
-    @RequestMapping(value = "/getUserType", method = RequestMethod.GET)
-    public Object getUserType(@RequestParam(value = "userName") String userName) throws Exception {
-        System.out.println("------------userName-----" + userName);
-        int type = userInfoAuthClient.getUserType(userName);
-        System.out.println("-----" + type);
-        Map<String,Object> TypeMap=new HashMap<>();
-        TypeMap.put("type",type);
-        return TypeMap;
-    }
-
 }

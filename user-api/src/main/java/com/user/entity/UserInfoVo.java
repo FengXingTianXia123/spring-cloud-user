@@ -12,13 +12,15 @@ public class UserInfoVo implements Serializable{
 
     private String realName;
 
-    private Boolean gender;
+    private Long gender;
 
     private Long age;
 
     private UserRecordVo userRecordVo;
 
     private String password;
+
+    private Long type;
 
     public Long getId() {
         return id;
@@ -44,11 +46,11 @@ public class UserInfoVo implements Serializable{
         this.realName = realName;
     }
 
-    public Boolean getGender() {
+    public Long getGender() {
         return gender;
     }
 
-    public void setGender(Boolean gender) {
+    public void setGender(Long gender) {
         this.gender = gender;
     }
 
@@ -74,5 +76,13 @@ public class UserInfoVo implements Serializable{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getType() {
+        return type;
+    }
+
+    public void setType(Long type) {
+        this.type = type;
     }
 }

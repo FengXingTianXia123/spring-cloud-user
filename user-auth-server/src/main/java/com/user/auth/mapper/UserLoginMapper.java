@@ -1,6 +1,7 @@
 package com.user.auth.mapper;
 
 import com.user.auth.entity.UserLogin;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserLoginMapper {
     int deleteByPrimaryKey(Long id);
@@ -15,7 +16,7 @@ public interface UserLoginMapper {
 
     int updateByPrimaryKey(UserLogin record);
 
-    int selectLoginInfo(String userName, String password);
+    int selectLoginInfo(@Param(value = "userName") String userName, @Param(value = "password") String password);
 
     int selectUserType(String userName);
 }

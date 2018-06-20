@@ -98,8 +98,15 @@
   </select>
   <select id="selectUserInfo" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
-    <include refid="Base_Column_List" />
-    from t_user_info
+    a.id,
+    a.name,
+    real_name,
+    gender,
+    age,
+    b.type
+    from t_user_info a
+    left Join t_user_login b
+    on b.user_name = a.name
     where name = #{name,jdbcType=VARCHAR}
   </select>
 </mapper>

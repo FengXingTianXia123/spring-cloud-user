@@ -3,7 +3,7 @@ package com.user.auth.entity;
 public class UserLogin {
     private Long id;
 
-    private String userName;
+    private String name;
 
     private Integer type;
 
@@ -17,12 +17,12 @@ public class UserLogin {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getName() {
+        return name;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getType() {
@@ -38,6 +38,6 @@ public class UserLogin {
     }
 
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.password = password;
     }
 }
