@@ -176,8 +176,10 @@ public class UserInfoController {
      */
     @RequestMapping(value = "/loginCheck",method = RequestMethod.GET)
     public Object loginCheck(HttpServletRequest request, HttpServletResponse response)throws Exception{
-        String userName=(String)request.getParameter("userName");
-        String password=(String)request.getParameter("password");
+
+        String userName=request.getParameter("userName");
+        System.out.println("---------"+userName);
+        String password=request.getParameter("password");
         int result = userInfoAuthClient.getUserLogin(userName,password);
         System.out.println("-----"+result);
         UserInfoVo userInfo =new UserInfoVo();

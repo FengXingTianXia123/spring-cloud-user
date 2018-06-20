@@ -12,11 +12,11 @@ import java.util.Map;
 public interface IUserCountService {
 
     @RequestMapping(value = "/getLoginMinuteByDay", method = RequestMethod.POST)
-    List<String> getLoginMinuteByDay(@RequestBody Map<String,Object>map)throws Exception;
+    List<Map<String,Object>> getLoginMinuteByDay(@RequestBody Map<String,Object>map)throws Exception;
 
     @RequestMapping(value = "/getPie", method = RequestMethod.GET)
     List<UserCountVo> getPie(@RequestParam(value = "type") String type)throws Exception;
 
     @RequestMapping(value = "/getUserCountByDay", method = RequestMethod.POST)
-    List<Integer> getUserCountByDay(@RequestBody Map<String,Object>map)throws Exception;
+    List<Map<String,Object>> getUserCountByDay(@RequestBody Map<String,Object>map)throws Exception;
 }

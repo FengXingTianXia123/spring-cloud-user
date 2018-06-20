@@ -17,22 +17,18 @@ spring:
     timeout: 70s
     store-type: none
 
+#  redis:
+#    host: 127.0.0.1
+#    port: 6379
+#    password:
+#    timeout: 60s
+#    database: 4
+#    jedis:
+#       pool:
+#         max-active: 20
+#         max-idle: 20
+#         min-idle: 0
+#         max-wait: 10000ms
 
-
-
-
-
-
-
-#    redis:
-#      host: 127.0.0.1
-#      port: 6379
-#      password: K5re9U#mX@
-#      database: 4
-#      pool:
-#        max-active: 20
-#        max-idle: 20
-#        min-idle: 0
-#
 
 

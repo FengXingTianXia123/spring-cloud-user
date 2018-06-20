@@ -7,6 +7,7 @@ import com.user.count.entity.UserCount;
 import com.user.count.mapper.RecordMapper;
 import com.user.entity.UserCountVo;
 import com.user.util.ClassCopy;
+import com.user.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,10 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RestController
@@ -26,16 +24,22 @@ public class UserCountServiceImpl implements IUserCountService {
     RecordMapper recordMapper;
 
     @Override
-    public List<String> getLoginMinuteByDay(@RequestBody Map<String, Object> map) throws Exception {
-        List<String> list = (List<String>) map.get("map");
+    public List<Map<String,Object>> getLoginMinuteByDay(@RequestBody Map<String, Object> map) throws Exception {
+
+        System.out.println("----ru can map:" + JSON.toJSONString(map));
+        String startDate=map.get("startDate").toString();
+        String endDate=map.get("endDate").toString();
+
+        List<String> list = DateUtil.getDatesBetweenTwoDate(startDate,endDate);
+//        System.out.println("------------------------"+JSON.toJSONString(list));
         long userId= Long.parseLong(map.get("userId")+"");
         System.out.println("----ru can:" + JSON.toJSONString(list));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 
-        List<String> resList = new ArrayList<>();
+        List<Map<String,Object>> resList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-
+            Map<String,Object> resMap =new HashMap<>();
             long curTime = sdf.parse(list.get(i)).getTime();
             System.out.println("curTime-----------" + curTime);
             long nextTime = curTime + 24 * 60 * 60 * 1000;
@@ -62,7 +66,10 @@ public class UserCountServiceImpl implements IUserCountService {
                 }
             }
             System.out.println("--------------" + t);
-            resList.add((t / 60000) + "");
+            resMap.put("curDate",list.get(i));
+            resMap.put("totalMinute",t / 60000);
+//            resList.add((t / 60000) + "");
+            resList.add(resMap);
             System.out.println("----fanhui jie guo:" + JSON.toJSONString(resList));
 
         }
@@ -85,15 +92,23 @@ public class UserCountServiceImpl implements IUserCountService {
     }
 
     @Override
-    public List<Integer> getUserCountByDay(@RequestBody Map<String, Object> map) throws Exception {
-        System.out.println("---map------"+JSON.toJSONString(map));
-        List<String> list = (List<String>) map.get("map");
+    public List<Map<String,Object>> getUserCountByDay(@RequestBody Map<String, Object> map) throws Exception {
+
+        System.out.println("----ru can map:" + JSON.toJSONString(map));
+        String startDate=map.get("startDate")+"";
+        String endDate=map.get("endDate")+"";
+
+        List<String> list = DateUtil.getDatesBetweenTwoDate(startDate,endDate);
         System.out.println("---------"+JSON.toJSONString(list));
-        List<Integer> res_list = new ArrayList<>();
+        List<Map<String,Object>> res_list = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
+            Map<String,Object>resMap =new HashMap<>();
             int count = 0;
             count = recordMapper.getUserCountByDay(list.get(i));
-            res_list.add(count);
+            resMap.put("curDate",list.get(i));
+            resMap.put("count",count);
+            res_list.add(resMap);
+//            res_list.add(count);
         }
         return res_list;
     }
